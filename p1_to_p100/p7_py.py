@@ -18,4 +18,4 @@ while len(primes) < num_of_primes:
     max_factor = find_largest_factor(i)
     if max_factor == i:
         primes.append(i)
-    i += 1
+    i += 10001
