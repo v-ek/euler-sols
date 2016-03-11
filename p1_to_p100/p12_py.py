@@ -35,6 +35,7 @@ def factorize(num):
                 factors.extend(next)
             return factors
 
+# Idea: prime factorisation, then the number of divisors are the product of the exp+1
 tresh = input("Treshhold for number of factors: ")
 i = 2
 while True:
