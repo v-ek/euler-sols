@@ -58,6 +58,11 @@ def convert_to_english(num):
     num_str = str(num)
     length = len(num_str)
 
+    thousands = 0
+    hundreds = 0
+    teens = 0
+    tens = 0
+    ones = 0
     if length == 4:
         thousands = int(num_str[0]) * 1000
         hundreds = int(num_str[1]) * 100
@@ -70,10 +75,10 @@ def convert_to_english(num):
     elif length == 3:
         hundreds = int(num_str[0]) * 100
         if num_str[-2:] > '19':
-            tens = int(num_str[0]) * 10
-            ones = int(num_str[1])
-        elif num_str[-2:] > '9': 
-            teens = int(num_str)
+            tens = int(num_str[1]) * 10
+            ones = int(num_str[2])
+        elif num_str[-2:] > '09': 
+            teens = int(num_str[-2:])
         else:
             ones = int(num_str[2])
 
@@ -81,13 +86,30 @@ def convert_to_english(num):
         if num_str > '19':
             tens = int(num_str[0]) * 10
             ones = int(num_str[1])
-        elif num_str > '9': 
+        elif num_str > '09': 
             teens = int(num_str)
         else:
             ones = int(num_str[1])
 
     elif length == 1:
         ones = int(num_str)
+    """
+    if thousands:
+        print 'thousands'
+        print thousands
+    if hundreds:
+        print 'hundreds'
+        print hundreds
+    if teens:
+        print 'teens'
+        print teens
+    if tens:
+        print 'tens'
+        print tens
+    if ones:
+        print 'ones'
+        print ones
+    """
 
     number_text = ''
 
@@ -121,34 +143,47 @@ def convert_to_english(num):
     except Exception, e:
         ones_text = ''
 
-    if length <= 2:
+    if hundreds_text:
         if teens_text:
-            number_text = '' + teens_text
-        elif tens_text and not ones_text:
+             number_text = hundreds_text + ' and ' + teens_text
+        elif tens_text:
+            if ones_text:
+                number_text = hundreds_text + ' and ' + tens_text + '-' + ones_text
+            else:
+                number_text = hundreds_text + ' and '  + tens_text
+        elif ones_text:
+            number_text = hundreds_text + ' and ' + ones_text
+        else:
+            number_text = hundreds_text
+    elif teens_text:
+        number_text = teens_text
+    elif tens_text:
+        if ones_text:
             number_text = tens_text + '-' + ones_text
         else:
-            tens_text = ones_text
-    elif tens_text and ones_text:
-        number_text = thousands_text + ' ' + hundreds_text + ' and ' + tens_text + '-' + ones_text
-    elif (not tens_text) and (not ones_text):
-        number_text = thousands_text + ' ' + hundreds_text
-    elif ones_text or tens_text:
-        number_text = thousands_text + ' ' + hundreds_text + ' and ' + tens_text + ones_text
-    else:
-        number_text = '?'
+            number_text = tens_text
+    elif ones_text:
+        number_text = ones_text
+    elif thousands_text:
+        number_text = thousands_text
 
     return number_text.strip()
 
-def letters(input):
-    return ''.join(filter(str.isalpha, input))
+def letters(num):
+    return ''.join(filter(str.isalpha, num))
 
 total_length = 0
 for ii in range(1,1001):
     curr_text = convert_to_english(ii)
     cleaned_text = letters(curr_text)
+    curr_len = len(cleaned_text)
+    total_length += curr_len
+    print ii
     print curr_text
     print cleaned_text
-    total_length += len(cleaned_text)
-    raw_input("Press Enter to continue...")
+    print curr_len
+    print total_length
+    if ii % 100 == 0:
+        variable = raw_input('input something!: ')
 
 print total_length
